@@ -58,17 +58,14 @@ public class Movement : MonoBehaviour
             StartCoroutine(Dash());
         }
         
-        
         if (IsGrounded() && _horizontalMove == 0)
         {
             if (Input.GetKeyDown(KeyCode.Z))
             {
-                Debug.Log("Apacity Changes");
                 _sprite.color = new Color(1f, 1f, 1f, 0.3f);
             }
             if(Input.GetKeyUp(KeyCode.Z))
             {
-                Debug.Log("Changes Back");
                 _sprite.color = new Color(1f,1f,1f,1f);
             }
         }
@@ -84,9 +81,6 @@ public class Movement : MonoBehaviour
     {
         if (_isDashing)
             return;
-        
-        
-        
         _rb.velocity = new Vector2(_horizontalMove, _rb.velocity.y);
     }
 
