@@ -97,11 +97,13 @@ public class Movement : MonoBehaviour
             _isFacingRight = !_isFacingRight;
             localScale.x *= -1f;
             transform.localScale = localScale;
+            Debug.Log("Flip");
         }
     }
     
     private IEnumerator Dash()
     {
+        Debug.Log("Dashing");
         _canDash = false;
         _isDashing = true;
         float originalGravity = _rb.gravityScale;
