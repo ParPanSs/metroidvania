@@ -6,6 +6,8 @@ public class Movement : MonoBehaviour
     public SpriteRenderer _sprite;
     public Transform feetPosition;
     public LayerMask whatIsGround;
+    //Ваня добавил
+    public LayerMask whatIsWall;
     
     private float _horizontalMove;
     private bool _doubleJump;
@@ -16,11 +18,16 @@ public class Movement : MonoBehaviour
     private float _dashingTime = 0.2f;
     private float _dashCooldown = 1f;
     private bool _isFacingRight = true;
+    //Ваня добавил Ivan added
+    private bool isClimbing;
+    private float inPutVertical;
     
     [SerializeField] private float jumpForce;
     [SerializeField] private float runSpeed;
     [SerializeField] private float checkRadius;
     [SerializeField] private TrailRenderer trail;
+    //Ваня добавил Ivan added
+    [SerializeField] private float distRayforWallCheck;
 
     private void Awake()
     {
@@ -82,6 +89,27 @@ public class Movement : MonoBehaviour
         if (_isDashing)
             return;
         _rb.velocity = new Vector2(_horizontalMove, _rb.velocity.y);
+        //Ваня начал писать от сюда Ivan started from here
+        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, Vector2.up, distRayforWallCheck, whatIsWall);
+        if (hitInfo.collider != null)
+        {
+            isClimbing = true;
+        }
+        else
+        {
+            isClimbing = false;
+        }
+        if (isClimbing == true)
+        {
+            inPutVertical = Input.GetAxisRaw("Vertical");
+            _rb.velocity = new Vector2(_rb.velocity.x, inPutVertical * runSpeed);
+            _rb.gravityScale = 0;
+        }
+        else
+        {
+            _rb.gravityScale = 3;
+        }
+        //Ваня закончил здесь Ivan Finished here
     }
 
     private bool IsGrounded()
