@@ -1,34 +1,33 @@
 using System.Collections;
 using UnityEngine;
+
 public class Movement : MonoBehaviour
 {
     private Rigidbody2D _rb;
-    public SpriteRenderer _sprite;
-    public Transform feetPosition;
-    public LayerMask whatIsGround;
-    //Ваня добавил
-    public LayerMask whatIsWall;
+    private SpriteRenderer _sprite;
     
+    private float _inPutVertical;
     private float _horizontalMove;
+    
     private bool _doubleJump;
     private bool _isHiding;
     private bool _canDash = true;
     private bool _isDashing;
-    private float _dashingPower = 20f;
-    private float _dashingTime = 0.2f;
-    private float _dashCooldown = 1f;
     private bool _isFacingRight = true;
-    //Ваня добавил Ivan added
-    private bool isClimbing;
-    private float inPutVertical;
+    private bool _isClimbing;
     
     [SerializeField] private float jumpForce;
     [SerializeField] private float runSpeed;
     [SerializeField] private float checkRadius;
     [SerializeField] private TrailRenderer trail;
-    //Ваня добавил Ivan added
     [SerializeField] private float distRayforWallCheck;
-
+    [SerializeField] private LayerMask whatIsGround;
+    [SerializeField] private LayerMask whatIsWall;
+    [SerializeField] private Transform feetPosition;
+    [SerializeField] private float dashingPower = 20f;
+    [SerializeField] private float dashingTime = 0.2f;
+    [SerializeField] private float dashCooldown = 1f;
+    
     private void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
@@ -50,7 +49,6 @@ public class Movement : MonoBehaviour
             if (IsGrounded() || _doubleJump)
             {
                 _rb.velocity = new Vector2(_rb.velocity.x, jumpForce);
-                
                 _doubleJump = !_doubleJump;  
             }
         }
@@ -88,28 +86,28 @@ public class Movement : MonoBehaviour
     {
         if (_isDashing)
             return;
+        
         _rb.velocity = new Vector2(_horizontalMove, _rb.velocity.y);
-        //Ваня начал писать от сюда Ivan started from here
+        
         RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, Vector2.up, distRayforWallCheck, whatIsWall);
         if (hitInfo.collider != null)
         {
-            isClimbing = true;
+            _isClimbing = true;
         }
         else
         {
-            isClimbing = false;
+            _isClimbing = false;
         }
-        if (isClimbing == true)
+        if (_isClimbing)
         {
-            inPutVertical = Input.GetAxisRaw("Vertical");
-            _rb.velocity = new Vector2(_rb.velocity.x, inPutVertical * runSpeed);
+            _inPutVertical = Input.GetAxisRaw("Vertical");
+            _rb.velocity = new Vector2(_rb.velocity.x, _inPutVertical * runSpeed);
             _rb.gravityScale = 0;
         }
         else
         {
             _rb.gravityScale = 3;
         }
-        //Ваня закончил здесь Ivan Finished here
     }
 
     private bool IsGrounded()
@@ -136,13 +134,13 @@ public class Movement : MonoBehaviour
         _isDashing = true;
         float originalGravity = _rb.gravityScale;
         _rb.gravityScale = 0f;
-        _rb.velocity = new Vector2(transform.localScale.x * _dashingPower, 0f);
+        _rb.velocity = new Vector2(transform.localScale.x * dashingPower, 0f);
         trail.emitting = true;
-        yield return new WaitForSeconds(_dashingTime);
+        yield return new WaitForSeconds(dashingTime);
         trail.emitting = false;
         _rb.gravityScale = originalGravity;
         _isDashing = false;
-        yield return new WaitForSeconds(_dashCooldown);
+        yield return new WaitForSeconds(dashCooldown);
         _canDash = true;
     }
 }
