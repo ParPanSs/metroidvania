@@ -8,6 +8,7 @@ public class Movement : MonoBehaviour
     
     private Rigidbody2D _rb;
     private SpriteRenderer _sprite;
+    private Animator _animator;
     
     private float _inPutVertical;
     private float _horizontalMove;
@@ -38,11 +39,13 @@ public class Movement : MonoBehaviour
     [SerializeField] private float dashingPower = 20f;
     [SerializeField] private float dashingTime = 0.2f;
     [SerializeField] private float dashCooldown = 1f;
-    
+    private static readonly int IsWalk = Animator.StringToHash("isWalk");
+
     private void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
         _sprite = GetComponent<SpriteRenderer>();
+        _animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -91,6 +94,16 @@ public class Movement : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.E) && _inAbility)
             _takingAbility = true;
+        
+        if (_horizontalMove != 0)
+        {
+            _animator.SetBool("isWalk", true);
+        }
+        else
+        {
+            
+            _animator.SetBool("isWalk", false);
+        }
         
         Flip();
     }
@@ -169,26 +182,22 @@ public class Movement : MonoBehaviour
             {
                 case "Dash":
                     _dashAbility = true;
-                    Destroy(other);
                     _takingAbility = !_takingAbility;
                     break;
                 case "DoubleJump":
                     _doubleJumpAbility = true;
                     _takingAbility = !_takingAbility;
-                    Destroy(other);
                     break;
                 case "Climb":
                     _climbAbility = true;
                     _takingAbility = !_takingAbility;
-                    Destroy(other);
                     break;
                 case "Invisibility":
                     _invisibleAbility = true;
                     _takingAbility = !_takingAbility;
-                    Destroy(other);
                     break;
-
             }
+            Destroy(other);
         }
     }
     
