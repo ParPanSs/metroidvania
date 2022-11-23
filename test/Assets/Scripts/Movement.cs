@@ -1,10 +1,14 @@
+using System;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
+    
     private Rigidbody2D _rb;
     private SpriteRenderer _sprite;
+    private Animator _animator;
     
     private float _inPutVertical;
     private float _horizontalMove;
@@ -15,6 +19,14 @@ public class Movement : MonoBehaviour
     private bool _isDashing;
     private bool _isFacingRight = true;
     private bool _isClimbing;
+    
+    private bool _doubleJumpAbility;
+    private bool _dashAbility;
+    private bool _climbAbility;
+    private bool _invisibleAbility;
+    
+    private bool _inAbility;
+    private bool _takingAbility;
     
     [SerializeField] private float jumpForce;
     [SerializeField] private float runSpeed;
@@ -27,11 +39,13 @@ public class Movement : MonoBehaviour
     [SerializeField] private float dashingPower = 20f;
     [SerializeField] private float dashingTime = 0.2f;
     [SerializeField] private float dashCooldown = 1f;
-    
+    private static readonly int IsWalk = Animator.StringToHash("isWalk");
+
     private void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
         _sprite = GetComponent<SpriteRenderer>();
+        _animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -46,26 +60,25 @@ public class Movement : MonoBehaviour
         
         if (Input.GetButtonDown("Jump"))
         {
-            if (IsGrounded() || _doubleJump)
+            if (IsGrounded() || (_doubleJump && _doubleJumpAbility))
             {
                 _rb.velocity = new Vector2(_rb.velocity.x, jumpForce);
                 _doubleJump = !_doubleJump;  
             }
         }
-
         if (Input.GetButtonUp("Jump") && _rb.velocity.y > 0f) 
         {
             _rb.velocity = new Vector2(_rb.velocity.x, _rb.velocity.y * 0.5f);
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftShift) && _canDash)
+        if (Input.GetKeyDown(KeyCode.LeftShift) && _canDash && _dashAbility)
         {
             StartCoroutine(Dash());
         }
         
         if (IsGrounded() && _horizontalMove == 0)
         {
-            if (Input.GetKeyDown(KeyCode.Z))
+            if (Input.GetKeyDown(KeyCode.Z) && _invisibleAbility)
             {
                 _sprite.color = new Color(1f, 1f, 1f, 0.3f);
             }
@@ -79,6 +92,19 @@ public class Movement : MonoBehaviour
             _sprite.color = new Color(1f,1f,1f,1f);
         }
 
+        if (Input.GetKeyDown(KeyCode.E) && _inAbility)
+            _takingAbility = true;
+        
+        if (_horizontalMove != 0)
+        {
+            _animator.SetBool("isWalk", true);
+        }
+        else
+        {
+            
+            _animator.SetBool("isWalk", false);
+        }
+        
         Flip();
     }
 
@@ -90,7 +116,7 @@ public class Movement : MonoBehaviour
         _rb.velocity = new Vector2(_horizontalMove, _rb.velocity.y);
         
         RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, Vector2.up, distRayforWallCheck, whatIsWall);
-        if (hitInfo.collider != null)
+        if (hitInfo.collider != null && _climbAbility)
         {
             _isClimbing = true;
         }
@@ -108,6 +134,7 @@ public class Movement : MonoBehaviour
         {
             _rb.gravityScale = 3;
         }
+        
     }
 
     private bool IsGrounded()
@@ -123,13 +150,11 @@ public class Movement : MonoBehaviour
             _isFacingRight = !_isFacingRight;
             localScale.x *= -1f;
             transform.localScale = localScale;
-            Debug.Log("Flip");
         }
     }
     
     private IEnumerator Dash()
     {
-        Debug.Log("Dashing");
         _canDash = false;
         _isDashing = true;
         float originalGravity = _rb.gravityScale;
@@ -142,5 +167,42 @@ public class Movement : MonoBehaviour
         _isDashing = false;
         yield return new WaitForSeconds(dashCooldown);
         _canDash = true;
+    }
+
+    public void OnTriggerEnter2D(Collider2D other)
+    {
+        _inAbility = true;
+    }
+
+    public void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.CompareTag("Ability") && _takingAbility)
+        {
+            switch (other.name)
+            {
+                case "Dash":
+                    _dashAbility = true;
+                    _takingAbility = !_takingAbility;
+                    break;
+                case "DoubleJump":
+                    _doubleJumpAbility = true;
+                    _takingAbility = !_takingAbility;
+                    break;
+                case "Climb":
+                    _climbAbility = true;
+                    _takingAbility = !_takingAbility;
+                    break;
+                case "Invisibility":
+                    _invisibleAbility = true;
+                    _takingAbility = !_takingAbility;
+                    break;
+            }
+            Destroy(other);
+        }
+    }
+    
+    public void OnTriggerExit2D(Collider2D other)
+    {
+        _inAbility = false;
     }
 }
