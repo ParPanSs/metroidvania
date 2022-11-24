@@ -1,15 +1,12 @@
-using System;
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
-    
     private Rigidbody2D _rb;
     private SpriteRenderer _sprite;
     private Animator _animator;
-    
+
     private float _inPutVertical;
     private float _horizontalMove;
     
@@ -28,6 +25,9 @@ public class Movement : MonoBehaviour
     private bool _inAbility;
     private bool _takingAbility;
     
+    private bool _spawnDust;
+    public GameObject dust;
+
     [SerializeField] private float jumpForce;
     [SerializeField] private float runSpeed;
     [SerializeField] private float checkRadius;
@@ -39,7 +39,6 @@ public class Movement : MonoBehaviour
     [SerializeField] private float dashingPower = 20f;
     [SerializeField] private float dashingTime = 0.2f;
     [SerializeField] private float dashCooldown = 1f;
-    private static readonly int IsWalk = Animator.StringToHash("isWalk");
 
     private void Awake()
     {
@@ -52,18 +51,23 @@ public class Movement : MonoBehaviour
     {
         if (_isDashing)
             return;
-        
+
         _horizontalMove = Input.GetAxis("Horizontal") * runSpeed;
 
         if (IsGrounded() && !Input.GetButton("Jump"))
+        {
             _doubleJump = false;
-        
+            _animator.SetBool("isJumping", false);
+        }
+
         if (Input.GetButtonDown("Jump"))
         {
             if (IsGrounded() || (_doubleJump && _doubleJumpAbility))
             {
+                _animator.SetBool("isJumping", true);
                 _rb.velocity = new Vector2(_rb.velocity.x, jumpForce);
-                _doubleJump = !_doubleJump;  
+                
+                _doubleJump = !_doubleJump;
             }
         }
         if (Input.GetButtonUp("Jump") && _rb.velocity.y > 0f) 
@@ -75,7 +79,20 @@ public class Movement : MonoBehaviour
         {
             StartCoroutine(Dash());
         }
-        
+
+        if (IsGrounded())
+        {
+            if (_spawnDust)
+            {
+                Instantiate(dust, feetPosition.position, Quaternion.identity);
+                _spawnDust = false;
+            }
+        }
+        else
+        {
+            _spawnDust = true;
+        }
+
         if (IsGrounded() && _horizontalMove == 0)
         {
             if (Input.GetKeyDown(KeyCode.Z) && _invisibleAbility)
@@ -101,10 +118,9 @@ public class Movement : MonoBehaviour
         }
         else
         {
-            
             _animator.SetBool("isWalk", false);
         }
-        
+
         Flip();
     }
 
@@ -134,9 +150,8 @@ public class Movement : MonoBehaviour
         {
             _rb.gravityScale = 3;
         }
-        
     }
-
+    
     private bool IsGrounded()
     {
         return Physics2D.OverlapCircle(feetPosition.position, checkRadius, whatIsGround);
@@ -169,12 +184,12 @@ public class Movement : MonoBehaviour
         _canDash = true;
     }
 
-    public void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
         _inAbility = true;
     }
 
-    public void OnTriggerStay2D(Collider2D other)
+    private void OnTriggerStay2D(Collider2D other)
     {
         if (other.CompareTag("Ability") && _takingAbility)
         {
@@ -201,7 +216,7 @@ public class Movement : MonoBehaviour
         }
     }
     
-    public void OnTriggerExit2D(Collider2D other)
+    private void OnTriggerExit2D(Collider2D other)
     {
         _inAbility = false;
     }
