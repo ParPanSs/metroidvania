@@ -2,12 +2,13 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] private int maxHealth = 100;
-    public int currentHealth;
-    void Start()
+    [SerializeField] private float maxHealth = 100f;
+    private float currentHealth;
+    private void Awake()
     {
         currentHealth = maxHealth;
     }
+
 
     public void TakeDamage(int damage)
     {
