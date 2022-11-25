@@ -250,6 +250,10 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3239412050904365334, guid: 302424a3d1b9e4d3fa23bc5565cc1a22, type: 3}
+      propertyPath: enemyLayers.m_Bits
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 6547999267108658041, guid: 302424a3d1b9e4d3fa23bc5565cc1a22, type: 3}
       propertyPath: m_RootOrder
       value: 1
