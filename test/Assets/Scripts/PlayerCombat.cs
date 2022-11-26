@@ -6,20 +6,16 @@ public class PlayerCombat : MonoBehaviour
     public Transform attackPoint;
     public float attackRange = 0.5f;
     public LayerMask enemyLayers;
-    public float attackRate = 2f;
     private Animator _animator;
     public int numberOfClicks;
     private float _lastClickedTime;
     private float _maxComboDelay = 1.5f;
-    [SerializeField] private float nextAttackTime;
     [SerializeField] private int attackDamage = 20;
-    private Rigidbody2D _rb;
 
 
     private void Awake()
     {
         _animator = GetComponent<Animator>();
-        _rb = GetComponent<Rigidbody2D>();
     }
 
     void Update()
@@ -39,7 +35,6 @@ public class PlayerCombat : MonoBehaviour
             }
             numberOfClicks = Mathf.Clamp(numberOfClicks, 0, 3);
             Attack();
-            nextAttackTime = Time.time + 2f / attackRate;
         }
         
         

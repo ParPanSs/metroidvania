@@ -1872,7 +1872,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.18611813, y: 0.017077982}
+  m_Offset: {x: 0.4309262, y: 0.017077923}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -1883,7 +1883,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 3.0547566, y: 3.2534504}
+  m_Size: {x: 2.5651405, y: 3.2534504}
   m_EdgeRadius: 0
 --- !u!96 &3239412050904365335
 TrailRenderer:
@@ -2040,6 +2040,7 @@ MonoBehaviour:
   - {fileID: 1167270538383156025}
   - {fileID: 8292734283534192600}
   - {fileID: 4606591755142439619}
+  pushForce: 5
 --- !u!95 &6924268803317973474
 Animator:
   serializedVersion: 4
@@ -7796,5 +7797,5 @@ Transform:
   - {fileID: 5671506790974342209}
   - {fileID: 8400871022511964930}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

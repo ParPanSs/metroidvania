@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Health : MonoBehaviour
@@ -10,11 +11,14 @@ public class Health : MonoBehaviour
     [SerializeField] private Image[] hearth;
 
     private Animator _animator;
+    private Rigidbody2D _rb;
+    [SerializeField] private float pushForce;
     
     private void Awake()
     {
         _animator = GetComponent<Animator>();
         _currentHealth = startingHealth;
+        _rb = GetComponent<Rigidbody2D>();
     }
 
     void Update()
@@ -39,15 +43,15 @@ public class Health : MonoBehaviour
             if(i == _currentHealth)
             {
                 Destroy(hearth[i]);
-                Debug.Log("Taking Damage, health: " + _currentHealth);
+                _rb.velocity = new Vector2(pushForce * 10, pushForce + 5);
                 //player hurt
                 _animator.SetTrigger("Damaged");
             }
             if(_currentHealth <= 0)
             {
                 //player dead
-                Debug.Log(this.name + " is Dead");
                 Destroy(gameObject,1f);
+                SceneManager.LoadScene(0);
             }
         }
         
