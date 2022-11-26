@@ -27,7 +27,7 @@ public class PlayerCombat : MonoBehaviour
         if (Time.time - _lastClickedTime > _maxComboDelay)
             numberOfClicks = 0;
         
-        if (Input.GetMouseButtonDown(0) && _rb.velocity == new Vector2(0,0))
+        if (Input.GetMouseButtonDown(0))
         {
             _lastClickedTime = Time.time;
             numberOfClicks++;
@@ -82,6 +82,7 @@ public class PlayerCombat : MonoBehaviour
         else
         {
             _animator.SetBool("Attack2", false);
+            _animator.SetBool("Attack1", false);
             numberOfClicks = 0;
         }
     }
