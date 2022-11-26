@@ -61,7 +61,6 @@ public class Movement : MonoBehaviour
 
         if (Input.GetButtonDown("Jump"))
         {
-            _animator.SetBool("isJumping", true);
             if (IsGrounded() || (_doubleJump && _doubleJumpAbility))
             {
                 _doubleJump = !_doubleJump;
@@ -90,6 +89,7 @@ public class Movement : MonoBehaviour
         else
         {
             _spawnDust = true;
+            _animator.SetBool("isJumping", true);
         }
 
         if (IsGrounded() && _horizontalMove == 0)
