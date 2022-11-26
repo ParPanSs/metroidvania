@@ -57,17 +57,14 @@ public class Movement : MonoBehaviour
         if (IsGrounded() && !Input.GetButton("Jump"))
         {
             _doubleJump = false;
-            _animator.SetBool("isJumping", false);
         }
 
         if (Input.GetButtonDown("Jump"))
         {
             if (IsGrounded() || (_doubleJump && _doubleJumpAbility))
             {
-                _animator.SetBool("isJumping", true);
-                _rb.velocity = new Vector2(_rb.velocity.x, jumpForce);
-                
                 _doubleJump = !_doubleJump;
+                _rb.velocity = new Vector2(_rb.velocity.x, jumpForce);
             }
         }
         if (Input.GetButtonUp("Jump") && _rb.velocity.y > 0f) 
@@ -86,11 +83,13 @@ public class Movement : MonoBehaviour
             {
                 Instantiate(dust, feetPosition.position, Quaternion.identity);
                 _spawnDust = false;
+                _animator.SetBool("isJumping", false);
             }
         }
         else
         {
             _spawnDust = true;
+            _animator.SetBool("isJumping", true);
         }
 
         if (IsGrounded() && _horizontalMove == 0)

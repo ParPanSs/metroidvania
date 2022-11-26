@@ -1,26 +1,59 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Health : MonoBehaviour
-{
-    [SerializeField] private float startingHealth;
-    private float currentHealth;
-        private void Awake()
+{ 
+    [SerializeField] private int startingHealth;
+    private int _currentHealth;
+    
+    public int numberOfHearts;
+    [SerializeField] private Image[] hearth;
+
+    private Animator _animator;
+    private Rigidbody2D _rb;
+    [SerializeField] private float pushForce;
+    
+    private void Awake()
     {
-        currentHealth = startingHealth;   
+        _animator = GetComponent<Animator>();
+        _currentHealth = startingHealth;
+        _rb = GetComponent<Rigidbody2D>();
     }
-    public void TakeDamage(float _damage)
+
+    void Update()
     {
-     currentHealth = Mathf.Clamp(currentHealth - _damage, 0, startingHealth);
-     if(currentHealth > 0)
+        for (int i = 0; i < hearth.Length; i++)
         {
-            Debug.Log("Taking Damage, health: " + currentHealth);
-            //player hurt
+            if (i < numberOfHearts)
+            {
+                hearth[i].enabled = true;
+            }
+            else
+            {
+                hearth[i].enabled = false;
+            }
         }
-        else
+    }
+    public void TakeDamage(int damage)
+    {
+        _currentHealth = Mathf.Clamp(_currentHealth - damage, 0, startingHealth);
+        for (int i = 0; i < hearth.Length; i++)
         {
-            //player dead
-            Debug.Log(this.name + " is Dead");
-            Destroy(gameObject,1f);
+            if(i == _currentHealth)
+            {
+                Destroy(hearth[i]);
+                _rb.velocity = new Vector2(pushForce * 10, pushForce + 5);
+                //player hurt
+                _animator.SetTrigger("Damaged");
+            }
+            if(_currentHealth <= 0)
+            {
+                //player dead
+                Destroy(gameObject,1f);
+                SceneManager.LoadScene(0);
+            }
         }
+        
     }
 }
