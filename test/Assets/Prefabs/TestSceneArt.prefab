@@ -2038,6 +2038,8 @@ MonoBehaviour:
   - {fileID: 1167270538383156025}
   - {fileID: 8292734283534192600}
   - {fileID: 4606591755142439619}
+  fullHeart: {fileID: 21300000, guid: 9a7666bc21b97ef46b6b685f6539482c, type: 3}
+  emptyHeart: {fileID: 21300000, guid: c1649accdce8a45c49711eb9de0debfc, type: 3}
   pushForce: 5
 --- !u!95 &6924268803317973474
 Animator:

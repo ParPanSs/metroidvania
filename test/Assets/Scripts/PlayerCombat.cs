@@ -11,11 +11,13 @@ public class PlayerCombat : MonoBehaviour
     private float _lastClickedTime;
     private float _maxComboDelay = 1.5f;
     [SerializeField] private int attackDamage = 20;
+    private Movement _isGrounded;
 
 
     private void Awake()
     {
         _animator = GetComponent<Animator>();
+        _isGrounded = GetComponent<Movement>();
     }
 
     void Update()
@@ -25,16 +27,23 @@ public class PlayerCombat : MonoBehaviour
         
         if (Input.GetMouseButtonDown(0))
         {
-            _lastClickedTime = Time.time;
-            numberOfClicks++;
-            if(numberOfClicks == 1)
-                _animator.SetBool("Attack1", true);
+            if(!_isGrounded.IsGrounded())
+                _animator.SetBool("AirAttack", true);
             else
             {
-                _animator.SetBool("Attack1", true);
+                _animator.SetBool("AirAttack", false);
+                _lastClickedTime = Time.time;
+                numberOfClicks++;
+                if (numberOfClicks == 1)
+                    _animator.SetBool("Attack1", true);
+                else
+                {
+                    _animator.SetBool("Attack1", true);
+                }
+
+                numberOfClicks = Mathf.Clamp(numberOfClicks, 0, 3);
+                Attack();
             }
-            numberOfClicks = Mathf.Clamp(numberOfClicks, 0, 3);
-            Attack();
         }
         
         
