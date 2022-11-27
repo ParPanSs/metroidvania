@@ -28,10 +28,9 @@ public class PlayerCombat : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             if(!_isGrounded.IsGrounded())
-                _animator.SetBool("AirAttack", true);
+                _animator.SetTrigger("AirAttack");
             else
             {
-                _animator.SetBool("AirAttack", false);
                 _lastClickedTime = Time.time;
                 numberOfClicks++;
                 if (numberOfClicks == 1)

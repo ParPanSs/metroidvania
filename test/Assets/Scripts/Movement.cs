@@ -61,6 +61,7 @@ public class Movement : MonoBehaviour
 
         if (Input.GetButtonDown("Jump"))
         {
+            _animator.SetBool("isJumping", true);
             if (IsGrounded() || (_doubleJump && _doubleJumpAbility))
             {
                 _doubleJump = !_doubleJump;
@@ -84,12 +85,12 @@ public class Movement : MonoBehaviour
                 Instantiate(dust, feetPosition.position, Quaternion.identity);
                 _spawnDust = false;
                 _animator.SetBool("isJumping", false);
+                _animator.ResetTrigger("AirAttack");
             }
         }
         else
         {
             _spawnDust = true;
-            _animator.SetBool("isJumping", true);
         }
 
         if (IsGrounded() && _horizontalMove == 0)
