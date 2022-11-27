@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 14613339}
   - component: {fileID: 14613338}
   m_Layer: 0
-  m_Name: DoubleJump
+  m_Name: Dash
   m_TagString: Ability
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2027,8 +2027,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb90e7a7dee6a994eae285619e820632, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingHealth: 5
-  numberOfHearts: 5
+  startingHealth: 8
+  numberOfHearts: 8
   hearth:
   - {fileID: 5967004515349261866}
   - {fileID: 4713719281872921890}
@@ -7797,5 +7797,5 @@ Transform:
   - {fileID: 5671506790974342209}
   - {fileID: 8400871022511964930}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
