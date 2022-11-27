@@ -150,8 +150,8 @@ public class Movement : MonoBehaviour
             _rb.gravityScale = 3;
         }
     }
-    
-    private bool IsGrounded()
+
+    public bool IsGrounded()
     {
         return Physics2D.OverlapCircle(feetPosition.position, checkRadius, whatIsGround);
     }

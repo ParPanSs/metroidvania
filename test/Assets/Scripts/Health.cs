@@ -9,6 +9,9 @@ public class Health : MonoBehaviour
     
     public int numberOfHearts;
     [SerializeField] private Image[] hearth;
+    [SerializeField] private Sprite fullHeart;
+    [SerializeField] private Sprite emptyHeart;
+
 
     private Animator _animator;
     private Rigidbody2D _rb;
@@ -42,7 +45,7 @@ public class Health : MonoBehaviour
         {
             if(i == _currentHealth)
             {
-                Destroy(hearth[i]);
+                hearth[i].sprite = emptyHeart;
                 _rb.velocity = new Vector2(pushForce * 10, pushForce + 5);
                 //player hurt
                 _animator.SetTrigger("Damaged");
