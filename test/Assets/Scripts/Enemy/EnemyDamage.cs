@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class EnemyDamage : MonoBehaviour
 {
-    [SerializeField] private int damage;
+    [SerializeField] protected int damage;
     
     
-    private void OnTriggerStay2D(Collider2D collision)
+    protected void OnTriggerStay2D(Collider2D collision)
     {
         if(collision.CompareTag("Player"))
         {
