@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class Health : MonoBehaviour
 { 
     [SerializeField] private int startingHealth;
-    private int _currentHealth;
+    public int _currentHealth;
     
     public int numberOfHearts;
     [SerializeField] private Image[] hearth;
@@ -51,12 +51,17 @@ public class Health : MonoBehaviour
                 _animator.SetTrigger("Damaged");
             }
             if(_currentHealth <= 0)
-            {
+            {                
                 //player dead
                 Destroy(gameObject,1f);
-                SceneManager.LoadScene(0);
+                SceneManager.LoadScene(0);      
             }
+           
         }
-        
+         //enemy dead
+            if (GetComponentInParent<EnemyPatrol>() != null)
+                GetComponentInParent<EnemyPatrol>().enabled = false;
+            if (GetComponentInParent<MeleeEnemy>() != null)
+                GetComponent<MeleeEnemy>().enabled = false;           
     }
 }

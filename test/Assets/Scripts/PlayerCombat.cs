@@ -10,7 +10,7 @@ public class PlayerCombat : MonoBehaviour
     public int numberOfClicks;
     private float _lastClickedTime;
     private float _maxComboDelay = 1.5f;
-    [SerializeField] private int attackDamage = 20;
+    [SerializeField] private int attackDamage;
     private Movement _isGrounded;
 
 
@@ -53,8 +53,8 @@ public class PlayerCombat : MonoBehaviour
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
         foreach(Collider2D enemy in hitEnemies)
         {
-            Debug.Log("Enemy is hit " + enemy.GetComponent<Enemy>().currentHealth);
-            enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
+            Debug.Log("Enemy is hit " + enemy.GetComponent<Health>()._currentHealth);
+            enemy.GetComponent<Health>().TakeDamage(attackDamage);
         }
     }
 
