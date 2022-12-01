@@ -16,6 +16,11 @@ public class Health : MonoBehaviour
     private Animator _animator;
     private Rigidbody2D _rb;
     [SerializeField] private float pushForce;
+
+    [Header("Components")]
+    [SerializeField] private Behaviour[] components;
+
+
     
     private void Awake()
     {
@@ -60,8 +65,15 @@ public class Health : MonoBehaviour
         }
          //enemy dead
             if (GetComponentInParent<EnemyPatrol>() != null)
-                GetComponentInParent<EnemyPatrol>().enabled = false;
-            if (GetComponentInParent<MeleeEnemy>() != null)
-                GetComponent<MeleeEnemy>().enabled = false;           
+                GetComponentInParent<EnemyPatrol>().enabled = false;            
+            foreach(Behaviour component in components)
+            {
+            component.enabled = false;
+            gameObject.SetActive(false);
+            }
+    }
+    public void Deactivate()
+    {
+        gameObject.SetActive(false);
     }
 }
